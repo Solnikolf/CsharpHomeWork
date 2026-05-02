@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PizzaLibrary
 {
-
-    
     public abstract class Dish
     {
         public string Name { get; }
@@ -26,7 +26,7 @@ namespace PizzaLibrary
     }
 
     
-    public class Pizza : Dish
+    public class Pizza : Dish, IComparable<Pizza>
     {
         public int Diameter { get; set; }
         public PizzaType Type { get; set; }
@@ -41,7 +41,20 @@ namespace PizzaLibrary
 
             Diameter = diameter;
             Type = type;
-            Ingredients = ingredients ?? Array.Empty<string>();
+            Ingredients = ingredients ?? new string[0];
+        }
+
+        
+        public int CompareTo(Pizza other)
+        {
+            if (other == null) return 1;
+
+            
+            int nameCompare = string.Compare(this.Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            if (nameCompare != 0) return nameCompare;
+
+            
+            return this.Diameter.CompareTo(other.Diameter);
         }
 
         public override string[] GetInfo()
@@ -62,9 +75,8 @@ namespace PizzaLibrary
             info[1] = $"Описание: {Description}. Тип: {typeStr}. Ингредиенты: {ingredientsStr}. Цена: {Price} руб.";
             return info;
         }
-    } 
+    }
 
-    
     public class Beverage : Dish
     {
         public bool IsHot { get; set; }
@@ -85,9 +97,8 @@ namespace PizzaLibrary
             info[1] = $"Объем: {VolumeMl} мл. Описание: {Description}. Цена: {Price} руб.";
             return info;
         }
-    } 
+    }
 
-    
     public class Snack : Dish
     {
         public int WeightGrams { get; set; }
@@ -105,6 +116,5 @@ namespace PizzaLibrary
             info[1] = $"Вес: {WeightGrams} г. Описание: {Description}. Цена: {Price} руб.";
             return info;
         }
-    } 
-
-} 
+    }
+}

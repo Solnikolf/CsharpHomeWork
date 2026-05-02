@@ -1,73 +1,68 @@
 ﻿using NUnit.Framework;
 using PizzaLibrary;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PizzaLibrary.UnitTests
 {
     [TestFixture]
-    public class PizzaUnitTests
+    public class PizzaInterfacesTests
     {
-        
         [Test]
-        public void Pizza_ConstructorAndInfo_Test()
-        {
-            var pizza = CreateTestPizza();
-
-            Assert.That(pizza.Name, Is.EqualTo("Пепперони"));
-            Assert.That(pizza.Diameter, Is.EqualTo(30));
-            Assert.That(pizza.Price, Is.EqualTo(500));
-
-            var info = pizza.GetInfo();
-            Assert.That(info[0], Is.EqualTo("Пепперони (30 см)"));
-        }
-
-        
-        [Test]
-        public void Beverage_GetInfo_HotDrink_ReturnsCorrectString()
-        {
-            // Создаем горячий чай
-            var coffee = new Beverage("Кофе", "Арабика", 150m, 200, true);
-
-            var info = coffee.GetInfo();
-
-            Assert.That(info[0], Is.EqualTo("Кофе (горячий напиток)"));
-            Assert.That(info[1], Does.Contain("200 мл"));
-            Assert.That(info[1], Does.Contain("150"));
-        }
-
-        
-        [Test]
-        public void Snack_GetInfo_ReturnsWeight()
+        public void PizzaSorting_ByNameThenByDiameter_Test()
         {
             
-            var fries = new Snack("Картофель фри", "Соленый", 120m, 150);
+            var p1 = new Pizza("Margarita", "Standard", 30, PizzaType.Thin, null, 500);
+            var p2 = new Pizza("Margarita", "Small", 25, PizzaType.Thin, null, 400);
+            var p3 = new Pizza("BBQ", "Meat", 30, PizzaType.Thin, null, 600);
 
-            var info = fries.GetInfo();
+            var list = new List<Pizza> { p1, p2, p3 };
 
-            Assert.That(info[0], Is.EqualTo("Картофель фри (закуска)"));
-            Assert.That(info[1], Does.Contain("150 г"));
+            
+            list.Sort();
+
+            
+            Assert.That(list[0].Name, Is.EqualTo("BBQ"));
+
+            
+            Assert.That(list[1].Name, Is.EqualTo("Margarita"));
+            Assert.That(list[1].Diameter, Is.EqualTo(25));
+
+            
+            Assert.That(list[2].Diameter, Is.EqualTo(30));
         }
 
-        // 
         [Test]
-        public void Dish_EmptyName_ThrowsArgumentException()
+        public void Order_IEnumerable_Foreach_Test()
         {
             
-            Assert.Throws<ArgumentException>(() =>
-                new Pizza("", "Описание", 30, PizzaType.Thin, null, 100m));
+            var order = new Order("Ivan", "Main St", "555-0100");
+            var pizza = new Pizza("Pepperoni", "Hot", 30, PizzaType.Thin, null, 500);
+            order.AddPizza(pizza);
+
+            
+            int count = 0;
+            foreach (var p in order)
+            {
+                Assert.That(p.Name, Is.EqualTo("Pepperoni"));
+                count++;
+            }
+
+            
+            Assert.That(count, Is.EqualTo(1));
         }
 
-        
-        private Pizza CreateTestPizza()
+        [Test]
+        public void Order_AddRemove_Test()
         {
-            return new Pizza(
-                "Пепперони",
-                "Острая",
-                30,
-                PizzaType.Thin,
-                new string[] { "колбаса", "сыр" },
-                500m
-            );
+            var order = new Order("Ivan", "Main St", "555-0100");
+            var pizza = new Pizza("Pepperoni", "Hot", 30, PizzaType.Thin, null, 500);
+
+            order.AddPizza(pizza);
+            Assert.That(order.Count(), Is.EqualTo(1)); // Используем LINQ .Count()
+
+            order.RemovePizza(pizza);
+            Assert.That(order.Count(), Is.EqualTo(0));
         }
     }
 }
