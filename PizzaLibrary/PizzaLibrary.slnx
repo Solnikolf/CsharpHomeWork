@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PizzaLibrary.UnitTests/PizzaLibrary.UnitTests.csproj" />
+  <Project Path="PizzaLibrary/PizzaLibrary.csproj" Id="f5d0980d-3f84-480b-8ed4-229362278970" />
+</Solution>
