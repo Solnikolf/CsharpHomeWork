@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Quanterion/Quanterion.csproj" />
+  <Project Path="QuaternionTests/QuaternionTests.csproj" />
+</Solution>
