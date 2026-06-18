@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Snake.Core/Snake.Core.csproj" />
+  <Project Path="Snake.Tests/Snake.Tests.csproj" />
+  <Project Path="Snake.WinForms/Snake.WinForms.csproj" />
+</Solution>
